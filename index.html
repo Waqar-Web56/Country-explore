@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Atlas — Country Explorer</title>
+  <meta name="description" content="Search every country and see its flag, capital, population, currency, languages and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { display: ['"Bricolage Grotesque"', 'sans-serif'], sans: ['"DM Sans"', 'system-ui', 'sans-serif'] },
+        colors: { ink: '#10223a', paper: '#f5f7fa', sea: '#0f766e', seaDark: '#115e59', mist: '#e4ebf2', sun: '#f4b942' }
+      } }
+    }
+  </script>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="bg-paper text-ink font-sans antialiased">
+
+  <header class="hero">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-14 sm:pb-20">
+      <nav class="flex items-center justify-between text-white">
+        <a href="#" class="font-display font-extrabold text-xl tracking-tight flex items-center gap-2">
+          <span class="inline-block w-3 h-3 rounded-full bg-sun"></span>Atlas
+        </a>
+        <span class="text-sm text-white/70" id="total-count" aria-live="polite"></span>
+      </nav>
+
+      <div class="mt-12 sm:mt-16 max-w-2xl">
+        <h1 class="font-display font-extrabold text-white text-4xl sm:text-6xl leading-[1.05] tracking-tight">
+          Look up any country on Earth.
+        </h1>
+        <p class="mt-4 text-white/75 text-base sm:text-lg max-w-xl">
+          Flags, capitals, populations, currencies and languages in one place.
+        </p>
+
+        <label for="search" class="sr-only">Search countries</label>
+        <div class="mt-8 relative">
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-ink/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="search" type="search" autocomplete="off" placeholder="Search by country or capital"
+            class="w-full h-14 pl-12 pr-4 rounded-2xl bg-white text-ink placeholder-ink/45 text-base shadow-xl shadow-black/20 focus:outline-none focus:ring-4 focus:ring-sun/60" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 -mt-6">
+    <section class="bg-white rounded-2xl shadow-lg shadow-ink/5 p-3 sm:p-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div id="regions" class="flex gap-2 overflow-x-auto no-scrollbar" role="group" aria-label="Filter by region"></div>
+      <div class="flex items-center gap-2 shrink-0">
+        <label for="sort" class="text-sm text-ink/60">Sort by</label>
+        <select id="sort" class="h-10 rounded-xl border border-mist bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-sea">
+          <option value="name">Name (A–Z)</option>
+          <option value="pop-desc">Population (high to low)</option>
+          <option value="pop-asc">Population (low to high)</option>
+          <option value="area-desc">Area (large to small)</option>
+        </select>
+      </div>
+    </section>
+
+    <p id="result-info" class="mt-6 mb-4 text-sm text-ink/60" aria-live="polite"></p>
+
+    <section id="grid" class="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"></section>
+
+    <div id="state" class="hidden text-center py-16"></div>
+
+    <div class="flex justify-center py-10">
+      <button id="more" class="hidden h-12 px-6 rounded-xl bg-ink text-white font-medium hover:bg-sea transition-colors focus:outline-none focus:ring-4 focus:ring-sea/30">Show more countries</button>
+    </div>
+  </main>
+
+  <footer class="border-t border-mist py-8 text-center text-sm text-ink/50">
+    Data from <a class="underline hover:text-sea" href="https://restcountries.com" target="_blank" rel="noopener">REST Countries</a>
+  </footer>
+
+  <!-- Detail dialog -->
+  <dialog id="detail" class="detail" aria-labelledby="d-name">
+    <div class="relative">
+      <button id="close" class="absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-white/90 hover:bg-white shadow flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-sea" aria-label="Close details">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <div id="detail-body"></div>
+    </div>
+  </dialog>
+
+  <script src="data/countries-fallback.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
